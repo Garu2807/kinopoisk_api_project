@@ -19,7 +19,7 @@ const parseJsonResponse = async (response: Response) => {
 
 export const getMovies = async (page = 1): Promise<Movie[]> => {
   const response = await fetch(
-    `${baseUrl}/v1.4/movie?page=${page}&limit=20&lists=top250`,
+    `${baseUrl}/v1.4/movie?page=${page}&limit=50&lists=top250`,
     {
       headers: {
         "X-API-KEY": apiKey,

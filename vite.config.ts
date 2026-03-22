@@ -1,6 +1,11 @@
+import { config } from 'dotenv'
 import { defineConfig } from 'vite'
 import react, { reactCompilerPreset } from '@vitejs/plugin-react'
 import babel from '@rolldown/plugin-babel'
+
+config({
+  path: '.env.default',
+})
 
 // https://vite.dev/config/
 export default defineConfig({

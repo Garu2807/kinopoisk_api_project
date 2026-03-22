@@ -21,7 +21,7 @@ function MovieItem({
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const isFavourite = useAppSelector((state) =>
-    state.favourites.favourites.some((favouriteMovie) => favouriteMovie.id === movie.id)
+    state.favourites.favourites.some((favouriteMovie) => favouriteMovie.id === movie.id),
   );
 
   useEffect(() => {
@@ -66,11 +66,7 @@ function MovieItem({
 
   return (
     <article className={styles.movie_item}>
-      <button
-        className={styles.posterButton}
-        onClick={handleClick}
-        type="button"
-      >
+      <button className={styles.posterButton} onClick={handleClick} type="button">
         <span className={styles.rating}>{rating}</span>
         {posterUrl ? (
           <img className={styles.movie_img} src={posterUrl} alt={movieName} />

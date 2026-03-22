@@ -8,7 +8,17 @@ import { Route, Routes } from "react-router-dom";
 import MoviePage from "./features/movies/MoviePage";
 import NavBar from "./features/navbar/NavBar";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 10,
+      gcTime: 1000 * 60 * 30,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      retry: 1,
+    },
+  },
+});
 
 function App() {
   return (
