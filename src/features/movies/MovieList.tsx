@@ -22,11 +22,7 @@ const AVAILABLE_GENRES = [
   "мультфильм",
 ];
 
-const parseNumberParam = (
-  value: string | null,
-  min: number,
-  max: number,
-) => {
+const parseNumberParam = (value: string | null, min: number, max: number) => {
   if (value === null || value === "") {
     return null;
   }
@@ -54,15 +50,18 @@ function MovieList() {
   const [yearFromInput, setYearFromInput] = useState(
     searchParams.get("yearFrom") ?? "",
   );
-  const [yearToInput, setYearToInput] = useState(searchParams.get("yearTo") ?? "");
+  const [yearToInput, setYearToInput] = useState(
+    searchParams.get("yearTo") ?? "",
+  );
 
   const debouncedLoadMoreVisible = useDebounce(isLoadMoreVisible, 180);
 
-  const selectedGenres = searchParams
-    .get("genres")
-    ?.split(",")
-    .map((genre) => genre.trim().toLowerCase())
-    .filter(Boolean) ?? [];
+  const selectedGenres =
+    searchParams
+      .get("genres")
+      ?.split(",")
+      .map((genre) => genre.trim().toLowerCase())
+      .filter(Boolean) ?? [];
   const ratingFrom = parseNumberParam(searchParams.get("ratingFrom"), 0, 10);
   const ratingTo = parseNumberParam(searchParams.get("ratingTo"), 0, 10);
   const yearFrom = parseNumberParam(
@@ -75,12 +74,16 @@ function MovieList() {
     MIN_YEAR,
     MAX_YEAR,
   );
-  const ratingFromValue = Number(ratingFromInput === "" ? "0" : ratingFromInput);
+  const ratingFromValue = Number(
+    ratingFromInput === "" ? "0" : ratingFromInput,
+  );
   const ratingToValue = Number(ratingToInput === "" ? "10" : ratingToInput);
   const yearFromValue = Number(
     yearFromInput === "" ? String(MIN_YEAR) : yearFromInput,
   );
-  const yearToValue = Number(yearToInput === "" ? String(MAX_YEAR) : yearToInput);
+  const yearToValue = Number(
+    yearToInput === "" ? String(MAX_YEAR) : yearToInput,
+  );
 
   const {
     data,
@@ -109,7 +112,12 @@ function MovieList() {
     }
 
     void fetchNextPage();
-  }, [debouncedLoadMoreVisible, fetchNextPage, hasNextPage, isFetchingNextPage]);
+  }, [
+    debouncedLoadMoreVisible,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  ]);
 
   useEffect(() => {
     setRatingFromInput(searchParams.get("ratingFrom") ?? "");
@@ -122,8 +130,9 @@ function MovieList() {
     const allMovies = data?.pages.flatMap((page) => page) ?? [];
     const uniqueMovies = allMovies.filter(
       (movie, index, currentMovies) =>
-        currentMovies.findIndex((currentMovie) => currentMovie.id === movie.id) ===
-        index,
+        currentMovies.findIndex(
+          (currentMovie) => currentMovie.id === movie.id,
+        ) === index,
     );
 
     return uniqueMovies.filter((movie) => {
@@ -173,7 +182,9 @@ function MovieList() {
     };
   }, [movies.length]);
 
-  const updateSearchParams = (updater: (params: URLSearchParams) => void): void => {
+  const updateSearchParams = (
+    updater: (params: URLSearchParams) => void,
+  ): void => {
     const nextParams = new URLSearchParams(searchParams);
     updater(nextParams);
     setSearchParams(nextParams, { replace: true });
@@ -270,7 +281,9 @@ function MovieList() {
       );
 
       if (exists) {
-        return currentMovies.filter((currentMovie) => currentMovie.id !== movie.id);
+        return currentMovies.filter(
+          (currentMovie) => currentMovie.id !== movie.id,
+        );
       }
 
       if (currentMovies.length < 2) {
@@ -320,7 +333,9 @@ function MovieList() {
 
                 return (
                   <button
-                    className={isActive ? styles.genreChipActive : styles.genreChip}
+                    className={
+                      isActive ? styles.genreChipActive : styles.genreChip
+                    }
                     key={genre}
                     onClick={() => handleGenreToggle(genre)}
                     type="button"
@@ -411,8 +426,8 @@ function MovieList() {
           <p className={styles.compareKicker}>Compare</p>
           <h2 className={styles.compareTitle}>Сравнение фильмов</h2>
           <p className={styles.compareHint}>
-            Можно выбрать до двух фильмов. При выборе третьего первый автоматически
-            заменяется.
+            Можно выбрать до двух фильмов. При выборе третьего первый
+            автоматически заменяется.
           </p>
         </div>
 
@@ -441,7 +456,10 @@ function MovieList() {
             <div className={styles.compareRow}>
               <span className={styles.compareLabel}>Рейтинг</span>
               {compareMovies.map((movie) => (
-                <span className={styles.compareValue} key={`${movie.id}-rating`}>
+                <span
+                  className={styles.compareValue}
+                  key={`${movie.id}-rating`}
+                >
                   {movie.rating?.imdb ?? "N/A"}
                 </span>
               ))}
@@ -449,7 +467,10 @@ function MovieList() {
             <div className={styles.compareRow}>
               <span className={styles.compareLabel}>Жанры</span>
               {compareMovies.map((movie) => (
-                <span className={styles.compareValue} key={`${movie.id}-genres`}>
+                <span
+                  className={styles.compareValue}
+                  key={`${movie.id}-genres`}
+                >
                   {movie.genres?.map((genre) => genre.name).join(", ") ||
                     "Не указаны"}
                 </span>
@@ -458,8 +479,13 @@ function MovieList() {
             <div className={styles.compareRow}>
               <span className={styles.compareLabel}>Длительность</span>
               {compareMovies.map((movie) => (
-                <span className={styles.compareValue} key={`${movie.id}-length`}>
-                  {movie.movieLength ? `${movie.movieLength} мин` : "Нет данных"}
+                <span
+                  className={styles.compareValue}
+                  key={`${movie.id}-length`}
+                >
+                  {movie.movieLength
+                    ? `${movie.movieLength} мин`
+                    : "Нет данных"}
                 </span>
               ))}
             </div>

@@ -21,7 +21,7 @@ function MovieItem({
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const isFavourite = useAppSelector((state) =>
-    state.favourites.favourites.some((favouriteMovie) => favouriteMovie.id === movie.id),
+    state.favourites.favourites.includes(movie.id),
   );
 
   useEffect(() => {
@@ -44,7 +44,7 @@ function MovieItem({
 
   const handleToggleFavourite = (): void => {
     if (isFavourite) {
-      dispatch(removeFromFavorites(movie));
+      dispatch(removeFromFavorites(movie.id));
       return;
     }
 
@@ -52,7 +52,7 @@ function MovieItem({
   };
 
   const handleConfirmAdd = (): void => {
-    dispatch(addToFavorites(movie));
+    dispatch(addToFavorites(movie.id));
     setIsConfirmOpen(false);
   };
 

@@ -3,27 +3,48 @@ import type { FavouritesState } from './types/FavouritesState';
 
 const getInitialStateFromLocalStorage = (): FavouritesState => {
   const savedState = localStorage.getItem('favouritesState');
-  return savedState ? JSON.parse(savedState) : { favourites: [] };
+
+  if (!savedState) {
+    return { favourites: [] };
+  }
+
+  const parsedState = JSON.parse(savedState) as {
+    favourites?: Array<number | { id?: number }>;
+  };
+
+  return {
+    favourites:
+      parsedState.favourites
+        ?.map((favourite) =>
+          typeof favourite === 'number' ? favourite : favourite.id,
+        )
+        .filter((id): id is number => Number.isInteger(id)) ?? [],
+  };
 };
 
 const initialState: FavouritesState = getInitialStateFromLocalStorage();
+
+const saveStateToLocalStorage = (state: FavouritesState): void => {
+  localStorage.setItem('favouritesState', JSON.stringify(state));
+};
 
 const FavouritesSlice = createSlice({
   name: 'favourites',
   initialState,
   reducers: {
     addToFavorites: (state, action) => {
-      const { id } = action.payload;
-      const isAlreadyAdded = state.favourites.some((movie) => movie.id === id);
+      const id = action.payload as number;
+      const isAlreadyAdded = state.favourites.includes(id);
+
       if (!isAlreadyAdded) {
-        state.favourites.push(action.payload);
-        localStorage.setItem('favouritesState', JSON.stringify(state));
+        state.favourites.push(id);
+        saveStateToLocalStorage(state);
       }
     },
     removeFromFavorites: (state, action) => {
-      const { id } = action.payload;
-      state.favourites = state.favourites.filter((movie) => movie.id !== id);
-      localStorage.setItem('favouritesState', JSON.stringify(state));
+      const id = action.payload as number;
+      state.favourites = state.favourites.filter((favouriteId) => favouriteId !== id);
+      saveStateToLocalStorage(state);
     },
   },
 });

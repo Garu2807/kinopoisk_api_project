@@ -14,7 +14,7 @@ function FavouritesItem({ movie }: MovieProps): JSX.Element {
   const navigate = useNavigate();
 
   const handleRemoveToFavourites = (): void => {
-    dispatch(removeFromFavorites(movie));
+    dispatch(removeFromFavorites(movie.id));
   };
 
   const handleClick = (): void => {
