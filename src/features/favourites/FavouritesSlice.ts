@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { FavouritesState } from './types/FavouritesState';
 
 const getInitialStateFromLocalStorage = (): FavouritesState => {
-  const savedState = localStorage.getItem('favouritesState');
+  const savedState = localStorage.getItem('favourites');
 
   if (!savedState) {
     return { favourites: [] };
@@ -25,7 +25,7 @@ const getInitialStateFromLocalStorage = (): FavouritesState => {
 const initialState: FavouritesState = getInitialStateFromLocalStorage();
 
 const saveStateToLocalStorage = (state: FavouritesState): void => {
-  localStorage.setItem('favouritesState', JSON.stringify(state));
+  localStorage.setItem('favourites', JSON.stringify(state));
 };
 
 const FavouritesSlice = createSlice({
